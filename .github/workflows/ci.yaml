@@ -1,4 +1,4 @@
-name: goreleaser-ci
+name: ci
 
 on:
   pull_request:
@@ -8,8 +8,8 @@ env:
   GO_VERSION: '1.23'
 
 jobs:
-  goreleaser-ci-linux:
-    name: goreleaser-ci-linux
+  ci-linux:
+    name: ci-linux
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,11 +45,11 @@ jobs:
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release --snapshot --skip publish,snapcraft,archive --clean --config .goreleaser.yaml
+          args: release --snapshot --skip publish,archive --clean --config .goreleaser.yaml
 
-  goreleaser-ci-windows:
-    name: goreleaser-ci-windows
-    needs: goreleaser-ci-linux
+  ci-windows:
+    name: ci-windows
+    needs: ci-linux
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -70,4 +70,4 @@ jobs:
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release --snapshot --skip publish,snapcraft,archive --clean --config .goreleaser-windows.yaml
+          args: release --snapshot --skip publish --clean --config .goreleaser-windows.yaml
