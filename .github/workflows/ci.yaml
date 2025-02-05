@@ -1,32 +1,29 @@
-name: goreleaser-ci
+name: ci
 
 on:
   pull_request:
       branches: [main]
 
 env:
-  GO_VERSION: '1.23'
+  GO_VERSION: '1.23.6'
 
 jobs:
-  goreleaser-ci-linux:
-    name: goreleaser-linux
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v5.3.0
         with:
           go-version: ${{ env.GO_VERSION }}
 
       - name: Ensure gofmt
         run: test -z "$(gofmt -s -d .)"
-
-      # - name: Ensure go.mod is already tidied
-      #   run: go mod tidy && git diff --exit-code
 
       - name: Check go mod
         run: |
@@ -38,33 +35,48 @@ jobs:
         uses: golangci/golangci-lint-action@v6.3.0
         with:
           version: latest
-          args: --issues-exit-code=0
+          args: --issues-exit-code=0  --config=.golangci.yml
 
-      - name: Build with Goreleaser
-        uses: goreleaser/goreleaser-action@v2
-        with:
-          distribution: goreleaser
-          version: '~> v2'
-          args: release --snapshot --skip publish,snapcraft --clean --config .goreleaser.yaml
-
-  goreleaser-ci-windows:
-    name: goreleaser-ci-windows
-    needs: goreleaser-ci-linux
-    runs-on: windows-latest
+  ci-linux:
+    name: ci-linux
+    needs: lint
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v5.3.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Build with Goreleaser
+        uses: goreleaser/goreleaser-action@v6.1.0
+        with:
+          distribution: goreleaser
+          version: '~> v2'
+          args: release --snapshot --skip publish,archive,sbom,homebrew --clean --config .goreleaser.yaml
+
+  ci-windows:
+    name: ci-windows
+    needs: ci-linux
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5.3.0
         with:
           go-version: ${{ env.GO_VERSION }}
 
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v6.1.0
         with:
           distribution: goreleaser
           version: '~> v2'
-          args: release --snapshot --skip publish,snapcraft --clean --config .goreleaser-windows.yaml
+          args: release --snapshot --skip publish,archive,sbom,chocolatey,winget --clean --config .goreleaser-windows.yaml
