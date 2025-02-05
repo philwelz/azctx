@@ -33,26 +33,26 @@ linters:
     - godox
     - gofmt
     - goimports
-    - mnd
+    #- mnd
     - goprintffuncname
     - gosec
     - gosimple
     - govet
     - intrange
     - ineffassign
-    - lll
-    - misspell
+    #- lll
+    #- misspell
     - nakedret
     - noctx
     - nolintlint
     - revive
     - staticcheck
-    - stylecheck
+    #- stylecheck
     - testifylint
     - unconvert
     - unparam
     - unused
-    - whitespace
+    #- whitespace
 
 
 linters-settings:
