@@ -32,7 +32,7 @@ sboms:
     cmd: syft
 
 archives:
-  - format: zip
+  - formats: [ 'zip' ]
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
