@@ -17,6 +17,8 @@ linters:
   # We intentionally use a limited set of linters.
   # See the comment on top of this file.
   enable:
+    - asciicheck
+    - bidichk
     - bodyclose
     - copyloopvar
     - depguard
@@ -32,6 +34,7 @@ linters:
     - gocyclo
     - godox
     - gofmt
+    - goheader
     - goimports
     #- mnd
     - goprintffuncname
@@ -41,18 +44,19 @@ linters:
     - intrange
     - ineffassign
     #- lll
-    #- misspell
+    - misspell
     - nakedret
+    - nilerr
     - noctx
     - nolintlint
     - revive
     - staticcheck
-    #- stylecheck
+    - stylecheck
     - testifylint
     - unconvert
     - unparam
     - unused
-    #- whitespace
+    - whitespace
 
 
 linters-settings:
@@ -116,16 +120,20 @@ linters-settings:
     ignored-functions:
       - strings.SplitN
   govet:
-    settings:
-      printf:
-        funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
-    enable:
-      - nilness
-      - shadow
+    enable-all: true
+    disable:
+      - fieldalignment
+  # govet:
+  #   settings:
+  #     printf:
+  #       funcs:
+  #         - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+  #         - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+  #         - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+  #         - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+  #   enable:
+  #     - nilness
+  #     - shadow
   errorlint:
     asserts: false
   lll:
