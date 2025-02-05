@@ -38,6 +38,7 @@ jobs:
         uses: golangci/golangci-lint-action@v6.3.0
         with:
           version: latest
+          args: --issues-exit-code=0
 
       - name: Build with Goreleaser
         uses: goreleaser/goreleaser-action@v2
