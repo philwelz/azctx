@@ -30,6 +30,8 @@ changelog:
 sboms:
   - artifacts: archive
     cmd: syft
+  - artifacts: source
+    cmd: syft
 
 archives:
   - formats: [ 'zip' ]
