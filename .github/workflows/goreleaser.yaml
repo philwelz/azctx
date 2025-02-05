@@ -35,30 +35,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AUTH_GITHUB: ${{ secrets.AUTH_GITHUB }}
-  goreleaser-windows:
-    name: goreleaser-windows
-    needs: goreleaser-linux
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Fetch all tags
-        run: git fetch --force --tags
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
-      - name: Download Syft
-        uses: anchore/sbom-action/download-syft@v0
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: '~> v2'
-          args: release --clean --config .goreleaser-windows.yaml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AUTH_GITHUB: ${{ secrets.AUTH_GITHUB }}
-          CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
