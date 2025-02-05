@@ -8,7 +8,7 @@ env:
   GO_VERSION: '1.23'
 
 jobs:
-  goreleaser-linux:
+  goreleaser-ci-linux:
     name: goreleaser-linux
     runs-on: ubuntu-latest
     steps:
@@ -45,3 +45,25 @@ jobs:
           distribution: goreleaser
           version: '~> v2'
           args: release --snapshot --skip publish,snapcraft --clean --config .goreleaser.yaml
+
+  goreleaser-ci-windows:
+    name: goreleaser-ci-windows
+    needs: goreleaser-ci-linux
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: '~> v2'
+          args: release --snapshot --skip publish,snapcraft --clean --config .goreleaser-windows.yaml
