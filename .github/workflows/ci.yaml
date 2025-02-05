@@ -25,9 +25,6 @@ jobs:
       - name: Ensure gofmt
         run: test -z "$(gofmt -s -d .)"
 
-      # - name: Ensure go.mod is already tidied
-      #   run: go mod tidy && git diff --exit-code
-
       - name: Check go mod
         run: |
           go mod tidy
