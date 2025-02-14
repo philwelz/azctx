@@ -3,6 +3,7 @@ run:
   allow-parallel-runners: true
   timeout: 5m
 
+# https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
 linters:
   # Disable all linters.
   # Default: false
@@ -100,8 +101,8 @@ linters-settings:
     # https://pkg.go.dev/cmd/gofmt
     # Default: []
     rewrite-rules:
-      - pattern: 'interface{}'
-        replacement: 'any'
+      # - pattern: 'interface{}'
+      #   replacement: 'any'
       - pattern: 'a[b:len(a)]'
         replacement: 'a[b:]'
 
